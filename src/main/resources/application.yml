@@ -1,0 +1,60 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: enterprise-task-platform
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${DB_URL:jdbc:mysql://127.0.0.1:3306/enterprise_task_platform?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:root}
+    druid:
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      max-wait: 60000
+      validation-query: SELECT 1
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+  data:
+    redis:
+      host: ${REDIS_HOST:127.0.0.1}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      database: ${REDIS_DATABASE:0}
+      timeout: 3s
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+
+rocketmq:
+  name-server: ${ROCKETMQ_NAME_SERVER:127.0.0.1:9876}
+  producer:
+    group: task-platform-producer-group
+
+jwt:
+  secret: ${JWT_SECRET:replace-with-prod-secret-please-change-123456}
+  expire-seconds: ${JWT_EXPIRE_SECONDS:7200}
+  issuer: ${JWT_ISSUER:enterprise-task-platform}
+
+swagger:
+  enabled: true
+
+task:
+  rate-limit:
+    submit:
+      window-seconds: 60
+      max-requests: 30
+    login:
+      window-seconds: 60
+      max-requests: 10
+
+springdoc:
+  api-docs:
+    enabled: ${swagger.enabled:true}
+  swagger-ui:
+    enabled: ${swagger.enabled:true}
