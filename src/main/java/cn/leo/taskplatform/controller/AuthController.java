@@ -1,5 +1,6 @@
 package cn.leo.taskplatform.controller;
 
+import cn.leo.taskplatform.annotation.OperationLog;
 import cn.leo.taskplatform.annotation.SlidingWindowLimit;
 import cn.leo.taskplatform.dto.auth.LoginRequest;
 import cn.leo.taskplatform.response.ApiResponse;
@@ -25,6 +26,7 @@ public class AuthController {
 
     @Operation(summary = "用户登录")
     @PostMapping("/login")
+    @OperationLog(module = "AUTH", action = "LOGIN")
     @SlidingWindowLimit(key = "auth:login", windowSeconds = 60, maxRequests = 10)
     public ApiResponse<?> login(@RequestBody @Valid LoginRequest request, HttpServletRequest httpServletRequest) {
         return ApiResponse.success(authService.login(request, httpServletRequest));
@@ -32,6 +34,7 @@ public class AuthController {
 
     @Operation(summary = "用户登出")
     @PostMapping("/logout")
+    @OperationLog(module = "AUTH", action = "LOGOUT")
     public ApiResponse<Void> logout() {
         authService.logout();
         return ApiResponse.success(null);
